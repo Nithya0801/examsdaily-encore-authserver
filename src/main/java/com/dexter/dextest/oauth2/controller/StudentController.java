@@ -1,5 +1,7 @@
 package com.dexter.dextest.oauth2.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -27,17 +29,17 @@ public class StudentController {
 	private StudentRepository studentRepository;
 	
 	@PostMapping(value = "/insertStudent")
-	public ResponseEntity<?> insertStudent(@RequestBody Student student) {
-		System.out.println("******* "+student.getStudentAddress().getCity());
+	public ResponseEntity<Integer> insertStudent(@RequestBody Student student) {
+//		System.out.println("******* "+student.getStudentAddress().getCity());
 		studentService.insertStudent(student);
-		return new ResponseEntity<String>("Success", HttpStatus.CREATED);
+		return new ResponseEntity<Integer>(student.getStudentId(), HttpStatus.CREATED);
 	}
 	
-//	@GetMapping(value = "/getStudent/{id}")
-//	public ResponseEntity<Student> getStudentById(@PathVariable("id") int id) {
-//		Student student = studentService.getById(id);
-//		if (student == null)
-//			return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
-//		return new ResponseEntity<Student>(student, HttpStatus.OK);
-//	}
+	@GetMapping(value = "/getStudentInfo/{id}")
+	public ResponseEntity<Student> getStudentById(@PathVariable("id") int id) {
+		Student student = studentRepository.findByStudentId(id); 
+		if (student == null)
+			return new ResponseEntity<Student>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Student>(student, HttpStatus.OK);
+	}
 }

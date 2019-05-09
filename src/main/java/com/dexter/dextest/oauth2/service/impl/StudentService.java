@@ -21,12 +21,16 @@ public class StudentService implements IStudentService{
 	
 //	public Student getById(int id) {
 //		List<Student> studentList=studentRepository.findAll();
+//		System.out.println("*****"+studentList);
 //		for(Student student:studentList)
 //		{
 //			if(student.getStudentId()==id)
 //				return student;
 //		}
-//		return null;
+////		return null;
+//		Student student = studentRepository.findByStudentId(id);
+//		System.out.println("-------------"+student);
+//		return student;
 //	}
 	
 }

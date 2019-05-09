@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -32,7 +33,7 @@ public class Student /*implements Serializable*/{
 	@GeneratedValue(generator="studSeq")
 	private int studentId;
 	
-	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date applicationDate;
 	
 	private String studentFirstName;
@@ -42,14 +43,15 @@ public class Student /*implements Serializable*/{
 	
 //	@Temporal(TemporalType.DATE)
 //	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date studentDob;
 //	private String studentDob;
 	private String studentGender;
 	
+//	@JsonBackReference
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
-//	@JoinTable(name="address_id",joinColumns = @JoinColumn(name="studentId", referencedColumnName = "studentId"),inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "addressId" ))
+//    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
+	@JoinTable(name="address_id",joinColumns = @JoinColumn(name="studentId", referencedColumnName = "studentId"),inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "addressId" ))
 	private Address studentAddress;
 //	private String studentAddress;
 	private String studentMobile;
@@ -57,7 +59,14 @@ public class Student /*implements Serializable*/{
 	private String fatherMobile;
 	private String motherMobile;
 	private String studentQualification;
+	private String avatar;
 		
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 	//	public Student() {
 //		this.studentAddress = new Address();
 //	}

@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name="Address")
 public class Address {
@@ -19,15 +21,26 @@ public class Address {
 	private String state;
 //	private String country;
 	private long zipcode;
-	@OneToOne(mappedBy="studentAddress")
-	private Student student;
 	
-	public Student getStudent() {
-		return student;
-	}
-	public void setStudent(Student student) {
-		this.student = student;
-	}
+//	@OneToOne(mappedBy="studentAddress")
+//	private Student student;
+//	
+//	public Student getStudent() {
+//		return student;
+//	}
+//	public void setStudent(Student student) {
+//		this.student = student;
+//	}
+//	@JsonManagedReference
+//	@OneToOne
+//	private Student studentId;
+	
+//	public Student getStudentId() {
+//		return studentId;
+//	}
+//	public void setStudentId(Student studentId) {
+//		this.studentId = studentId;
+//	}
 	public int getAddressId() {
 		return addressId;
 	}

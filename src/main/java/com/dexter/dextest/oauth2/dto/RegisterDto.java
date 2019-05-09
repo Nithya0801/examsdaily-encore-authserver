@@ -18,7 +18,21 @@ public class RegisterDto {
 	public String confirmationToken;
 	public String verificationToken;
 	public String generatedOtp;
+	private String roleType;
+	private String mobileNumber;
 	
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	public String getRoleType() {
+		return roleType;
+	}
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
+	}
 	public String getUsername() {
 		return username;
 	}

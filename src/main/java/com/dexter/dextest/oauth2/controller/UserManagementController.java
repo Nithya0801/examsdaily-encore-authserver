@@ -11,30 +11,30 @@ package com.dexter.dextest.oauth2.controller;
 //import javax.servlet.http.HttpServletResponse;
 //
 //import org.hibernate.mapping.Array;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController;
 //
 //import com.dexter.dextest.oauth2.dto.RegisterDto;
 //import com.dexter.dextest.oauth2.dto.Status;
-//import com.dexter.dextest.oauth2.dto.UserDto;
+import com.dexter.dextest.oauth2.dto.UserDto;
 //import com.dexter.dextest.oauth2.dto.VerifyDto;
 //import com.dexter.dextest.oauth2.model.User;
-//import com.dexter.dextest.oauth2.service.impl.UserService;
-//import com.dexter.dextest.oauth2.utilities.ContactValidator;
+import com.dexter.dextest.oauth2.service.impl.UserService;
+import com.dexter.dextest.oauth2.utilities.ContactValidator;
 
-//@RequestMapping("/manage/user")
-//@RestController
+@RequestMapping("/manage/user")
+@RestController
 public class UserManagementController {
-/*	@Autowired private UserService userService;
-	
+	@Autowired private UserService userService;
+/*	
 	@PostMapping("/register/bulk")
 	public ResponseEntity<?> registerBulk(@RequestBody final List<RegisterDto> dtoList){
 
@@ -89,7 +89,7 @@ public class UserManagementController {
 			return "User Not Found";
 				
 	}
-	
+	*/
 	@GetMapping("/find/{contact}")	
 	public ResponseEntity<?> findByContact(@PathVariable String contact) {
 		UserDto user=null;
@@ -103,7 +103,7 @@ public class UserManagementController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(user);
 	}	
-	
+/*	
 	@GetMapping("/find/all")
 	public ResponseEntity<?> findAll(){
 		List<UserDto> users=userService.findAll();

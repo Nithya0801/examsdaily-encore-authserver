@@ -49,27 +49,38 @@ public class UserService implements IUserService {
 		User user = new User();
 		user.setUsername(dto.getUsername());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
-		user.setFirstName(dto.getFirstName());
-		user.setLastName(dto.getLastName());
+		user.setFirstName("xxx");
+		user.setLastName("yyy");
+		user.setMobileNumber(dto.getMobileNumber());
 		user.setEnabled(true);
 		user.setAvatar(dto.getAvatar());
 		user.setRegistrationMode(dto.getRegisterMode());
 		user.setCreatedAt(LocalDateTime.now());
-		if(dto.getRegisterMode().equals("GOOGLE"))
-			user.setPasscode(dto.getPassword());
-		if(dto.getRegisterMode().equals("FACEBOOK"))
-			user.setPasscode(dto.getPassword());
-		if(dto.getRegisterMode().equals("FACEBOOKMB"))
-			user.setPasscode(dto.getPassword());
+//		if(dto.getRegisterMode().equals("GOOGLE"))
+//			user.setPasscode(dto.getPassword());
+//		if(dto.getRegisterMode().equals("FACEBOOK"))
+//			user.setPasscode(dto.getPassword());
+//		if(dto.getRegisterMode().equals("FACEBOOKMB"))
+//			user.setPasscode(dto.getPassword());
 		if(dto.getRegisterMode().equals("DIRECT"))
 			user.setPasscode(dto.getPassword());
-		Role role=roleRepository.findByRole("ROLE_USER");
+		System.out.println("User service RegisterDTO*-*-*-*--"+dto.getRoleType());
+		
+		Role role=roleRepository.findByRole(dto.getRoleType());
+		System.out.println("Role from DB-==========="+role);
+		if(role==null) {
+			role=new Role();
+			role.setRoleName(dto.getRoleType());
+			roleRepository.save(role);
+		}
+		
+/*		Role role=roleRepository.findByRole("ROLE_USER");
 		if(role==null) {
 			role=new Role();
 			role.setRoleName("ROLE_USER");
 			roleRepository.save(role);
 		}
-
+*/
 
 	/*
 		Role role=roleRepository.findByRole("ROLE_ADMIN");
@@ -91,9 +102,9 @@ public class UserService implements IUserService {
 				contact.setUserId(user);
 				contact.setVerified(true);
 		
-				if(dto.getRegisterMode().equals("FACEBOOKMB"))
-					
-					contact.setVerified(false);
+//				if(dto.getRegisterMode().equals("FACEBOOKMB"))
+//					
+//					contact.setVerified(false);
 			} else if (ContactValidator.isValidMobileNumber(dto.getContact())) {
 				contact.setType("mobile");
 				contact.setData(dto.getContact());

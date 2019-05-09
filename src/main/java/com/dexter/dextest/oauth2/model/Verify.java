@@ -65,7 +65,25 @@ public class Verify implements Serializable{
 	    
 	private LocalDateTime otpGeneratedAt;
 	
+	private String roleType;
+	
+	private String mobileNumber;
 
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getRoleType() {
+		return roleType;
+	}
+
+	public void setRoleType(String roleType) {
+		this.roleType = roleType;
+	}
 
 	public String getVerifyId() {
 		return verifyId;

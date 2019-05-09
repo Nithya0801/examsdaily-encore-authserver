@@ -61,7 +61,17 @@ public class User implements UserDetails{
     
     private String passcode; 
     
-    @JsonBackReference
+    private String mobileNumber;
+    
+    public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	@JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)    
     @JoinTable(name="users_contacts",joinColumns = @JoinColumn(name="userId", referencedColumnName = "userId"),inverseJoinColumns = @JoinColumn(name = "contactId", referencedColumnName = "contactId" ))
     private Set<Contact> contacts=new HashSet<Contact>();
