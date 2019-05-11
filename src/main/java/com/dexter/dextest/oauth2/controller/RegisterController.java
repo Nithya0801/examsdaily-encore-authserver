@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dexter.dextest.oauth2.dto.PasswordResetDto;
 import com.dexter.dextest.oauth2.dto.RegisterDto;
+import com.dexter.dextest.oauth2.dto.Status;
 import com.dexter.dextest.oauth2.dto.UserDto;
 import com.dexter.dextest.oauth2.dto.VerifyDto;
 import com.dexter.dextest.oauth2.model.Contact;
@@ -64,45 +67,68 @@ public class RegisterController {
 	
 	@PostMapping("/userRegister")
 	public ResponseEntity<?>contactEmail(@RequestBody final RegisterDto dto){
-		UserDto usernameExists=userService.findByUsername(dto.getUsername());
-		UserDto emailExists=userService.findByEmail(dto.getContact());
+//		UserDto usernameExists=userService.findByUsername(dto.getUsername());
+//		UserDto emailExists=userService.findByEmail(dto.getContact());
 //		UserDto mobileExists=userService.findByMobile(dto.getContact());
-	System.out.println("RegisterDTO*** "+dto.getRoleType()+"------"+dto.getContact());
-		if (emailExists==null /*&& mobileExists==null*/ && usernameExists==null) {				
-			Verify verify =new Verify();
-			if (ContactValidator.isValidEmailAddress(dto.getContact())){
-				System.out.println("inside email...");
-					verify.setType("email");					
-					verify.setContact(dto.getContact());
-					verify.setUsername(dto.getUsername());
-					/*int index = verify.getContact().indexOf('@');
-			        String emailId = verify.getContact().substring(0,index);
-			        verify.setUsername(emailId);*/					
-//					verify.setFirstName(dto.getFirstName());
-//					verify.setLastName(dto.getLastName());
-					verify.setMobileNumber(dto.getMobileNumber());
-					verify.setVerified(false);
-					verify.setTokenGeneratedAt(LocalDateTime.now());
-					verify.setVerificationToken(UUID.randomUUID().toString());
-					verify.setRoleType(dto.getRoleType());
-				
-//					String appUrl = "http://test.examsdaily.in";
-					String appUrl = "http://localhost:8080";
-					SimpleMailMessage emailVerification = new SimpleMailMessage();
-					emailVerification.setTo(dto.getContact());
-					emailVerification.setSubject("EMAIL VERIFICATION");
-					emailVerification.setText("Dear "+verify.getFirstName()+" "+verify.getLastName()+"\n\n"+"Your Username : "+verify.getUsername()+"\n"+"To Verify Your Email & set password, please click the link below:\n"
-							+ appUrl + "/#/mail_password?token=" + verify.getVerificationToken()+"\n\n"
-							+"With Regards,\n" +
-							"Developer Team.(ExamsDaily.in)");
-					emailVerification.setFrom("noreply@examsdaily.in");
-					emailService.sendEmail(emailVerification);
-					verifyRepository.save(verify);
-					System.out.println("An Activation Link Has Been Sent TO Your EmailID :"+dto.getContact());			
-					return ResponseEntity
-						.status(HttpStatus.OK)
-						.body("An Activation Link For Re-Verification Has Been Sent TO Your EmailID : "+dto.getContact());
-			    }
+		
+//		System.out.println("RegisterDTO*** "+dto.getRoleType()+"------"+dto.getContact()+"---------"+dto.getUsername()+"--------"+dto.getPassword()+"------"
+//				+dto.getRegisterMode());
+	
+		if(userService.findByUsername(dto.getUsername())!=null) {
+			return ResponseEntity
+					.status(HttpStatus.CONFLICT)
+					.body("Username Already Exists");	
+		}
+		if(userService.findByEmail(dto.getContact())!=null) {
+			return ResponseEntity
+					.status(HttpStatus.CONFLICT)
+					.body("Email Already Exists");
+		}
+		if(userService.findByMobile(dto.getContact())!=null) {
+			return ResponseEntity
+					.status(HttpStatus.CONFLICT)
+					.body("Mobile Already Exists");
+		}
+		userService.registerUser(dto);
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(dto);
+	
+//		if (emailExists==null && mobileExists==null && usernameExists==null) {				
+//			Verify verify =new Verify();
+//			if (ContactValidator.isValidEmailAddress(dto.getContact())){
+//				System.out.println("inside email...");
+//					verify.setType("email");					
+//					verify.setContact(dto.getContact());
+//					verify.setUsername(dto.getUsername());
+//					/*int index = verify.getContact().indexOf('@');
+//			        String emailId = verify.getContact().substring(0,index);
+//			        verify.setUsername(emailId);*/					
+////					verify.setFirstName(dto.getFirstName());
+////					verify.setLastName(dto.getLastName());
+//					verify.setMobileNumber(dto.getMobileNumber());
+//					verify.setVerified(false);
+//					verify.setTokenGeneratedAt(LocalDateTime.now());
+//					verify.setVerificationToken(UUID.randomUUID().toString());
+//					verify.setRoleType(dto.getRoleType());
+//				
+////					String appUrl = "http://test.examsdaily.in";
+//					String appUrl = "http://localhost:8080";
+//					SimpleMailMessage emailVerification = new SimpleMailMessage();
+//					emailVerification.setTo(dto.getContact());
+//					emailVerification.setSubject("EMAIL VERIFICATION");
+//					emailVerification.setText("Dear "+verify.getFirstName()+" "+verify.getLastName()+"\n\n"+"Your Username : "+verify.getUsername()+"\n"+"To Verify Your Email & set password, please click the link below:\n"
+//							+ appUrl + "/#/mail_password?token=" + verify.getVerificationToken()+"\n\n"
+//							+"With Regards,\n" +
+//							"Developer Team.(ExamsDaily.in)");
+//					emailVerification.setFrom("noreply@examsdaily.in");
+//					emailService.sendEmail(emailVerification);
+//					verifyRepository.save(verify);
+//					System.out.println("An Activation Link Has Been Sent TO Your EmailID :"+dto.getContact());			
+//					return ResponseEntity
+//						.status(HttpStatus.OK)
+//						.body("An Activation Link For Re-Verification Has Been Sent TO Your EmailID : "+dto.getContact());
+//			    }
 		
 		/*	    else if (ContactValidator.isValidMobileNumber(dto.getContact())) {
 			    	System.out.println("inside mobile...");
@@ -143,17 +169,149 @@ public class RegisterController {
 			}			
 			}*/
 		
-			verifyRepository.save(verify);
-			return ResponseEntity
-					.status(HttpStatus.CREATED)
-					.body(verify);
-	}
-			
-		return ResponseEntity
-			.status(HttpStatus.CONFLICT)
-			.body("Email/Mobile/Username Already Exists");	
+//			verifyRepository.save(verify);
+//			return ResponseEntity
+//					.status(HttpStatus.CREATED)
+//					.body(verify);
+//	}
+//			
+//		return ResponseEntity
+//			.status(HttpStatus.CONFLICT)
+//			.body("Email/Mobile/Username Already Exists");	
 		
 	}
+	
+//	@PostMapping("/userRegister")
+//	public ResponseEntity<?>contactEmail(@RequestBody final RegisterDto dto){
+//		UserDto usernameExists=userService.findByUsername(dto.getUsername());
+//		UserDto emailExists=userService.findByEmail(dto.getContact());
+////		UserDto mobileExists=userService.findByMobile(dto.getContact());
+//	System.out.println("RegisterDTO*** "+dto.getRoleType()+"------"+dto.getContact());
+//		if (emailExists==null /*&& mobileExists==null*/ && usernameExists==null) {				
+//			Verify verify =new Verify();
+//			if (ContactValidator.isValidEmailAddress(dto.getContact())){
+//				System.out.println("inside email...");
+//					verify.setType("email");					
+//					verify.setContact(dto.getContact());
+//					verify.setUsername(dto.getUsername());
+//					/*int index = verify.getContact().indexOf('@');
+//			        String emailId = verify.getContact().substring(0,index);
+//			        verify.setUsername(emailId);*/					
+////					verify.setFirstName(dto.getFirstName());
+////					verify.setLastName(dto.getLastName());
+//					verify.setMobileNumber(dto.getMobileNumber());
+//					verify.setVerified(false);
+//					verify.setTokenGeneratedAt(LocalDateTime.now());
+//					verify.setVerificationToken(UUID.randomUUID().toString());
+//					verify.setRoleType(dto.getRoleType());
+//				
+////					String appUrl = "http://test.examsdaily.in";
+//					String appUrl = "http://localhost:8080";
+//					SimpleMailMessage emailVerification = new SimpleMailMessage();
+//					emailVerification.setTo(dto.getContact());
+//					emailVerification.setSubject("EMAIL VERIFICATION");
+//					emailVerification.setText("Dear "+verify.getFirstName()+" "+verify.getLastName()+"\n\n"+"Your Username : "+verify.getUsername()+"\n"+"To Verify Your Email & set password, please click the link below:\n"
+//							+ appUrl + "/#/mail_password?token=" + verify.getVerificationToken()+"\n\n"
+//							+"With Regards,\n" +
+//							"Developer Team.(ExamsDaily.in)");
+//					emailVerification.setFrom("noreply@examsdaily.in");
+//					emailService.sendEmail(emailVerification);
+//					verifyRepository.save(verify);
+//					System.out.println("An Activation Link Has Been Sent TO Your EmailID :"+dto.getContact());			
+//					return ResponseEntity
+//						.status(HttpStatus.OK)
+//						.body("An Activation Link For Re-Verification Has Been Sent TO Your EmailID : "+dto.getContact());
+//			    }
+//		
+//		/*	    else if (ContactValidator.isValidMobileNumber(dto.getContact())) {
+//			    	System.out.println("inside mobile...");
+//			    	verify.setType("mobile");
+//					verify.setUsername(dto.getUsername());
+//					verify.setContact(dto.getContact());
+//					verify.setFirstName(dto.getFirstName());
+//					verify.setLastName(dto.getLastName());
+//					verify.setVerified(false);	
+//					verify.setOtpGeneratedAt(LocalDateTime.now());
+//				try {
+//					int randomPIN = (int)(Math.random()*9000)+1000;
+//					String pin = ""+randomPIN;
+//					verify.setGeneratedOtp(pin);
+//					// Construct data
+//					String apiKey = "apikey=" + "Yn2BvW3C3fs-qmgn5rnhQKCdsTOjbsxoCAd0Ie4Lxj";
+//					String message = "&message=" + "To verify your Mobile number, please enter the OTP number given below :\n" + verify.getGeneratedOtp();
+//					String sender = "&sender=" + "TXTLCL";			
+//					String numbers = "&numbers=" + (dto.getContact());			
+//					// Send data
+//					HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+//					String data = apiKey + numbers + message + sender;
+//					conn.setDoOutput(true);
+//					conn.setRequestMethod("POST");
+//					conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+//					conn.getOutputStream().write(data.getBytes("UTF-8"));
+//					final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//					final StringBuffer stringBuffer = new StringBuffer();
+//					String line;
+//					while ((line = rd.readLine()) != null) {
+//						stringBuffer.append(line);
+//					}
+//					rd.close();
+//					System.out.println(stringBuffer.toString());				
+//				} 
+//				catch (Exception e) {
+//				System.out.println("Error SMS "+e);	
+//			}			
+//			}*/
+//		
+//			verifyRepository.save(verify);
+//			return ResponseEntity
+//					.status(HttpStatus.CREATED)
+//					.body(verify);
+//	}
+//			
+//		return ResponseEntity
+//			.status(HttpStatus.CONFLICT)
+//			.body("Email/Mobile/Username Already Exists");	
+//		
+//	}
+	
+	@PostMapping("/userRegister/bulk")
+	public ResponseEntity<?> registerBulk(@RequestBody final List<RegisterDto> dtoList){
+
+//		Map<Integer, String> statusResult=new HashMap<Integer, String>();
+		List<Status> statusResult=new ArrayList<>();
+		int count=0;
+		for(RegisterDto dto : dtoList) {
+			System.out.println(dto.toString());
+//			String data=" username: " + dto.getUsername() + ", contact: " + dto.getContact() + ", password : " + dto.getPassword() ;
+			if(userService.findByUsername(dto.getUsername())!=null) {
+//				statusResult.put(count, "{index: " + count + ", staus: failed, info: Username exists, " + data + "}");
+				statusResult.add(new Status(dto.getUsername(), dto.getContact(), dto.getPassword(), "Failed", "Username exists"));
+				count++;
+				continue;
+			}
+			if(userService.findByEmail(dto.getContact())!=null) {
+//				statusResult.put(count, "{index: " + count + ", staus: failed, info: Email exists, " + data + "}");
+				statusResult.add(new Status(dto.getUsername(), dto.getContact(), dto.getPassword(), "Failed", "Email exists"));				
+				count++;
+				continue;			
+			}
+			if(userService.findByMobile(dto.getContact())!=null) {
+//				statusResult.put(count, "{index: " + count + ", staus: failed, info: Mobile exists, " + data + "}");
+				statusResult.add(new Status(dto.getUsername(), dto.getContact(), dto.getPassword(), "Failed", "Mobile exists"));				
+				count++;
+				continue;	
+			}			
+			
+			
+			userService.registerUser(dto);
+			statusResult.add(new Status(dto.getUsername(), dto.getContact(), dto.getPassword(), "Success", "User Created"));
+			count++;
+		}
+			
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(statusResult);
+	}	
 	
 //	@PostMapping("/userRegister")
 //	public ResponseEntity<?>contactEmail(@RequestBody final RegisterDto dto){

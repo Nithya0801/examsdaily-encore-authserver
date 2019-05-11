@@ -3,7 +3,7 @@ package com.dexter.dextest.oauth2.dto;
 import java.io.Serializable;
 
 public class Status implements Serializable  {
-/*	private String username;
+	private String username;
 	private String contact;
 	private String password;
 	private String status;
@@ -48,5 +48,5 @@ public class Status implements Serializable  {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-	*/
+	
 }	

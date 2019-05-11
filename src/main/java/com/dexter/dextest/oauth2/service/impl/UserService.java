@@ -49,9 +49,9 @@ public class UserService implements IUserService {
 		User user = new User();
 		user.setUsername(dto.getUsername());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
-		user.setFirstName("xxx");
-		user.setLastName("yyy");
-		user.setMobileNumber(dto.getMobileNumber());
+//		user.setFirstName("xxx");
+//		user.setLastName("yyy");
+//		user.setMobileNumber(dto.getMobileNumber());
 		user.setEnabled(true);
 		user.setAvatar(dto.getAvatar());
 		user.setRegistrationMode(dto.getRegisterMode());
@@ -63,11 +63,9 @@ public class UserService implements IUserService {
 //		if(dto.getRegisterMode().equals("FACEBOOKMB"))
 //			user.setPasscode(dto.getPassword());
 		if(dto.getRegisterMode().equals("DIRECT"))
-			user.setPasscode(dto.getPassword());
-		System.out.println("User service RegisterDTO*-*-*-*--"+dto.getRoleType());
+			user.setPasscode(dto.getPassword());		
 		
-		Role role=roleRepository.findByRole(dto.getRoleType());
-		System.out.println("Role from DB-==========="+role);
+		Role role=roleRepository.findByRole(dto.getRoleType());		
 		if(role==null) {
 			role=new Role();
 			role.setRoleName(dto.getRoleType());
@@ -133,8 +131,8 @@ public class UserService implements IUserService {
 				else if (c.getType().equals("mobile"))
 					mobiles.add(c.getData());
 			}
-			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), user.getFirstName(),
-					user.getLastName(), user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
+			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), /*user.getFirstName(),*/
+					/*user.getLastName(), */user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
 					dto.setPassword(user.getPasscode());
 					dto.setAvatar(user.getAvatar());
 			return dto;
@@ -155,8 +153,8 @@ public class UserService implements IUserService {
 				else if (c.getType().equals("mobile"))
 					mobiles.add(c.getData());
 			}
-			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), user.getFirstName(),
-					user.getLastName(), user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
+			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), /*user.getFirstName(),
+					user.getLastName(),*/ user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
 					dto.setPassword(user.getPasscode());
 					dto.setAvatar(user.getAvatar());
 					dto.setGeneratedOtp(user.getGeneratedOtp());
@@ -181,8 +179,8 @@ public class UserService implements IUserService {
 							mobiles.add(c.getData());
 					}
 				}
-			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), user.getFirstName(),
-					user.getLastName(), user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
+			UserDto dto = new UserDto(user.getUserId().toString(), user.getUsername(), /*user.getFirstName(),
+					user.getLastName(), */user.isEnabled(), emails, mobiles, user.getRoles(), user.getCreatedAt());
 					dto.setPassword(user.getPasscode());
 					dto.setAvatar(user.getAvatar());
 			return dto;
@@ -226,8 +224,8 @@ public class UserService implements IUserService {
 					else if (c.getType().equals("mobile"))
 						mobiles.add(c.getData());
 				}			
-			dtoList.add(new UserDto(u.getUserId().toString(), u.getUsername(), u.getFirstName(),
-					u.getLastName(), u.isEnabled(), emails, mobiles, u.getRoles(), u.getCreatedAt()));
+			dtoList.add(new UserDto(u.getUserId().toString(), u.getUsername(),/* u.getFirstName(),
+					u.getLastName(), */u.isEnabled(), emails, mobiles, u.getRoles(), u.getCreatedAt()));
 		}		
 		return dtoList;
 	}
@@ -253,8 +251,8 @@ public class UserService implements IUserService {
 					else if (c.getType().equals("mobile"))
 						mobiles.add(c.getData());
 				}			
-			dtoList.add(new UserDto(u.getUserId().toString(), u.getUsername(), u.getFirstName(),
-					u.getLastName(), u.isEnabled(), emails, mobiles, u.getRoles(), u.getCreatedAt()));
+			dtoList.add(new UserDto(u.getUserId().toString(), u.getUsername(),/* u.getFirstName(),
+					u.getLastName(),*/ u.isEnabled(), emails, mobiles, u.getRoles(), u.getCreatedAt()));
 		}		
 		return dtoList;
 	}

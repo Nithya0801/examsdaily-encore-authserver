@@ -1,9 +1,9 @@
 package com.dexter.dextest.oauth2.controller;
 
 //import java.io.Serializable;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.HashMap;
-//import java.util.List;
+import java.util.List;
 //import java.util.Map;
 //
 //import javax.servlet.ServletException;
@@ -16,14 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 //
-//import com.dexter.dextest.oauth2.dto.RegisterDto;
-//import com.dexter.dextest.oauth2.dto.Status;
+import com.dexter.dextest.oauth2.dto.RegisterDto;
+import com.dexter.dextest.oauth2.dto.Status;
 import com.dexter.dextest.oauth2.dto.UserDto;
 //import com.dexter.dextest.oauth2.dto.VerifyDto;
 //import com.dexter.dextest.oauth2.model.User;
@@ -34,8 +34,8 @@ import com.dexter.dextest.oauth2.utilities.ContactValidator;
 @RestController
 public class UserManagementController {
 	@Autowired private UserService userService;
-/*	
-	@PostMapping("/register/bulk")
+	
+	/*@PostMapping("/register/bulk")
 	public ResponseEntity<?> registerBulk(@RequestBody final List<RegisterDto> dtoList){
 
 //		Map<Integer, String> statusResult=new HashMap<Integer, String>();
@@ -72,7 +72,8 @@ public class UserManagementController {
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(statusResult);
-	}	
+	}	*/
+	/*
 	@GetMapping("/findByEmail")
 	public String findbyEmail(@RequestParam("email") String email) {
 		if(userService.findByEmail(email)!=null)
@@ -103,7 +104,7 @@ public class UserManagementController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(user);
 	}	
-/*	
+	
 	@GetMapping("/find/all")
 	public ResponseEntity<?> findAll(){
 		List<UserDto> users=userService.findAll();
@@ -111,7 +112,7 @@ public class UserManagementController {
 				.status(HttpStatus.OK)
 				.body(users);
 	}	
-	*/
+	
 	/*=============================================================
 	BELOW API USES DYNAMIC PAGINATION FOR DISPLAYING THE USERS LISTS
 	=============================================================*/

@@ -29,12 +29,12 @@ public class UserDto {
 	public UserDto() {
 		super();		
 	}
-	public UserDto(String id, String username, String firstName, String lastName, boolean enabled, List<String> email, List<String> mobile, Collection<Role> roles ,LocalDateTime createdAt) {		
+	public UserDto(String id, String username, /*String firstName, String lastName,*/ boolean enabled, List<String> email, List<String> mobile, Collection<Role> roles ,LocalDateTime createdAt) {		
 		super();
 		this.id=id;
 		this.username=username;
-		this.firstName=firstName;
-		this.lastName=lastName;
+//		this.firstName=firstName;
+//		this.lastName=lastName;
 		this.enabled=enabled;
 		this.email=email;
 		this.mobile=mobile;
